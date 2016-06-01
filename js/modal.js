@@ -15,7 +15,9 @@
 
   var Modal = function (element, options) {
     this.options             = options
-    this.$body               = $(document.body)
+    this.$body               = $(options.modalBackdropTarget);
+    if (this.$body.length===0) { this.$body = $(element).closest( '.modal-backdrop-target' ); }
+    if (this.$body.length===0) { this.$body = $(document.body); }
     this.$element            = $(element)
     this.$dialog             = this.$element.find('.modal-dialog')
     this.$backdrop           = null

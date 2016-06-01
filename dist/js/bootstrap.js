@@ -931,7 +931,9 @@ if (typeof jQuery === 'undefined') {
 
   var Modal = function (element, options) {
     this.options             = options
-    this.$body               = $(document.body)
+    this.$body               = $(options.modalBackdropTarget);
+    if (this.$body.length===0) { this.$body = $(element).closest( '.modal-backdrop-target' ); }
+    if (this.$body.length===0) { this.$body = $(document.body); }
     this.$element            = $(element)
     this.$dialog             = this.$element.find('.modal-dialog')
     this.$backdrop           = null
@@ -1573,9 +1575,11 @@ if (typeof jQuery === 'undefined') {
 
     function complete() {
       if (that.hoverState != 'in') $tip.detach()
-      that.$element
-        .removeAttr('aria-describedby')
-        .trigger('hidden.bs.' + that.type)
+      if (that.$element) { // TODO: Check whether guarding this code with this `if` is really necessary.
+        that.$element
+          .removeAttr('aria-describedby')
+          .trigger('hidden.bs.' + that.type)
+      }
       callback && callback()
     }
 
@@ -1734,6 +1738,7 @@ if (typeof jQuery === 'undefined') {
       that.$tip = null
       that.$arrow = null
       that.$viewport = null
+      that.$element = null
     })
   }
 
